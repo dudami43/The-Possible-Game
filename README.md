@@ -1,4 +1,3 @@
-# The-Possible-Game
 
 ### Tech
 * [gcc]

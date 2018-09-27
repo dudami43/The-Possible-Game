@@ -1,0 +1,3 @@
+C:/Users/meomi/Documents/6º Período/Inf 390/The-Possible-Game/build/CMakeFiles/rebuild_cache.dir
+C:/Users/meomi/Documents/6º Período/Inf 390/The-Possible-Game/build/CMakeFiles/jogo.dir
+C:/Users/meomi/Documents/6º Período/Inf 390/The-Possible-Game/build/CMakeFiles/edit_cache.dir
