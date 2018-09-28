@@ -5,6 +5,7 @@
 using namespace std;
 
 char estado[50];
+int tipo = 0;
 
 void handle_key(unsigned char key, int mousex, int mousey)
 {
@@ -13,6 +14,51 @@ void handle_key(unsigned char key, int mousex, int mousey)
     {
     }
     glutPostRedisplay();
+}
+
+void HandleMouse(int button, int state, int x, int y)
+{
+    y = 500 - y;
+    if(tipo == 0)
+    {
+        cout << "tipo 0 \n";
+        if(y>=380 && y<=450)
+        {
+            cout << "y \n";
+            if(x>=100 && x<=180)
+            {
+                cout << "x \n";
+                glColor3f (1.0, 0.0, 0.0);
+                glBegin(GL_POLYGON);
+                    glVertex2f(100, 450);
+                    glVertex2f(180, 450);
+                    glVertex2f(180, 380);
+                    glVertex2f(100, 380);
+                glEnd();   
+            }
+            if(x>=210 && x<=290)
+            {
+                glColor3f (1.0, 0.0, 0.0);
+                glBegin(GL_POLYGON);
+                    glVertex2f(210, 450);
+                    glVertex2f(290, 450);
+                    glVertex2f(290, 380);
+                    glVertex2f(210, 380);
+                glEnd();   
+            }
+            if(x>=320 && x<=400)
+            {
+                glColor3f (1.0, 0.0, 0.0);
+                glBegin(GL_POLYGON);
+                    glVertex2f(320, 450);
+                    glVertex2f(400, 450);
+                    glVertex2f(400, 380);
+                    glVertex2f(320, 380);
+                glEnd();     
+            }
+        }
+    }
+    glFlush();
 }
 
 void desenhaTexto()
@@ -122,6 +168,7 @@ int main(int argc, char** argv)
     glutCreateWindow ("Trabalho 2");
     init ();
     glutKeyboardFunc(handle_key);
+    glutMouseFunc(HandleMouse);
     glutDisplayFunc(display);
     glutMainLoop();
     return 0;   /* ISO C requires main to return int. */
