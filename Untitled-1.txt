@@ -1,0 +1,22 @@
+﻿//Performance
+tempo_novo = glutGet(GLUT_ELAPSED_TIME);
+tempo_antigo = tempo_novo;
+while(rodando)
+{
+    tempo_novo = glutGet(GLUT_ELAPSED_TIME);
+    variacao_de_tempo = tempo_novo - tempo_antigo;
+    if(tipo==30 || variacao_de_tempo>(100/3)) 
+    //segundo em milisegundos? -> não
+    // numero de quadros igual a taxa de quadros? -> sim
+    {
+        tempo_antigo = tempo_novo;
+        atualiza_jogo(); //mouse e teclado e display
+        glutMainLoopEvent(); //??
+    }
+    //que??
+}
+
+Dúvidas:
+Explicação do código da Performance
+Uso do viewport -> ok
+Física: t0 é qdo aperta espaço
