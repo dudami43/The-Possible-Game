@@ -4,13 +4,16 @@
 #include <ctime>
 
 using namespace std;
-int frames = 0, plataforma, cont; 
+
+char texto[50];
+int frames = 0, plataforma, cont, marcado = -1; 
+int estado = 0; // 0 Clique para iniciar 1 Você perdeu 2 Você ganhou 3 Jogo
 GLfloat posX_obstaculos[8], posX, posY; // variaveis obstaculos
 GLfloat tempo_novo, tempo_antigo, variacao_de_tempo; // variaveis controle de frames
 GLfloat escalaX = 0, escalaY = 0; // variaveis "camera"
-GLfloat tempo_pulo, tempo_inicial, t; // variaveis pulo
-GLfloat posX_jogador = 0, posY_jogador = 4; // variaveis jogador
-bool primeiro_desenho = true, rodando = true, pulando = false;
+GLfloat tempo_pulo, tempo_inicial, t, rotacao = 0, altura = 4; // variaveis pulo
+GLfloat posX_jogador = 0, posY_jogador = 4, tamanho = 10; // variaveis jogador
+bool primeiro_desenho = true, pulando = false;
 
 bool posicaoValida(GLfloat posicao)
 {
@@ -231,26 +234,25 @@ void criaJogador()
     glColor3f (0.5, 0.0, 0.5);
     glBegin(GL_POLYGON);
         glVertex2f(posX_jogador, posY_jogador);
-        glVertex2f(posX_jogador+10, posY_jogador);
-        glVertex2f(posX_jogador+10, posY_jogador+5);
-        glVertex2f(posX_jogador, posY_jogador+5);
+        glVertex2f(posX_jogador+tamanho, posY_jogador);
+        glVertex2f(posX_jogador+tamanho, posY_jogador+(tamanho/2));
+        glVertex2f(posX_jogador, posY_jogador+(tamanho/2));
     glEnd();
     glColor3f (1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
-        glVertex2f(posX_jogador, posY_jogador+5);
-        glVertex2f(posX_jogador+10, posY_jogador+5);
-        glVertex2f(posX_jogador+10, posY_jogador+10);
-        glVertex2f(posX_jogador, posY_jogador+10);
+        glVertex2f(posX_jogador, posY_jogador+(tamanho/2));
+        glVertex2f(posX_jogador+tamanho, posY_jogador+(tamanho/2));
+        glVertex2f(posX_jogador+tamanho, posY_jogador+tamanho);
+        glVertex2f(posX_jogador, posY_jogador+tamanho);
     glEnd();
 }
 
 void puloJogador()
 { 
-    tempo_pulo = glutGet(GLUT_ELAPSED_TIME)/1000.0; 
-    t = tempo_pulo - tempo_inicial;
     if(t<(2.0*(25.0/9.8)))
     {
-        posY_jogador = 4.0 + (25.0*t) - ((0.5)*(9.8)*(t*t));
+        posY_jogador = altura + (25.0*t) - ((0.5)*(9.8)*(t*t));
+        //rotacao -= 0.03;
         tempo_pulo = glutGet(GLUT_ELAPSED_TIME)/1000.0; 
         t = tempo_pulo - tempo_inicial;
     }
@@ -293,19 +295,144 @@ bool chegou()
     return false;
 }
 
+void desenhaTexto()
+{
+    char iniciar[50];
+
+	glColor3d(1, 1, 1);
+
+    sprintf(iniciar, "INICIAR");
+    glPushMatrix();
+	    glRasterPos2f(235, 270);
+        for (char *i = iniciar; *i != 0; i++)
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *i);
+	glPopMatrix();
+
+    sprintf(iniciar, "00");
+    glPushMatrix();
+	    glRasterPos2f(130, 400);
+        for (char *i = iniciar; *i != 0; i++)
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *i);
+	glPopMatrix();
+
+    sprintf(iniciar, "30");
+    glPushMatrix();
+	    glRasterPos2f(240, 400);
+        for (char *i = iniciar; *i != 0; i++)
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *i);
+	glPopMatrix();
+
+    sprintf(iniciar, "60");
+    glPushMatrix();
+	    glRasterPos2f(350, 400);
+        for (char *i = iniciar; *i != 0; i++)
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *i);
+	glPopMatrix();
+
+    glPushMatrix();
+	    glRasterPos2f(220, 130);
+        for (char *i = texto; *i != 0; i++)
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *i);
+	glPopMatrix();
+
+	//glFlush();
+}
+
+void menu()
+{
+    if(marcado == 00) glColor3f (1.0,0.45,1.0);
+    else glColor3f (0.30, 0.79, 1.0);
+    glBegin(GL_POLYGON);
+        glVertex2f(100, 450);
+        glVertex2f(180, 450);
+        glVertex2f(180, 380);
+        glVertex2f(100, 380);
+    glEnd();  
+
+    if(marcado == 30) glColor3f (1.0,0.45,1.0);
+    else glColor3f (0.30, 0.79, 1.0);
+    glBegin(GL_POLYGON);
+        glVertex2f(210, 450);
+        glVertex2f(290, 450);
+        glVertex2f(290, 380);
+        glVertex2f(210, 380);
+    glEnd();  
+
+    if(marcado == 60) glColor3f (1.0,0.45,1.0);
+    else glColor3f (0.30, 0.79, 1.0);
+    glBegin(GL_POLYGON);
+        glVertex2f(320, 450);
+        glVertex2f(400, 450);
+        glVertex2f(400, 380);
+        glVertex2f(320, 380);
+    glEnd();
+    
+    glColor3f (0.30, 0.79, 1.0);
+    glBegin(GL_POLYGON);
+        glVertex2f(100, 350);
+        glVertex2f(400, 350);
+        glVertex2f(400, 200);
+        glVertex2f(100, 200);
+    glEnd();   
+    glBegin(GL_POLYGON);
+        glVertex2f(100, 170);
+        glVertex2f(400, 170);
+        glVertex2f(400, 110);
+        glVertex2f(100, 110);
+    glEnd();   
+    desenhaTexto();
+}
+
 void handleKeyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
 		case 32:
-            tempo_inicial = glutGet(GLUT_ELAPSED_TIME)/1000.0; 
+            cout << "X " << posX_jogador << " Y " << posY_jogador << endl;
+            if((posX_jogador<=1000 && posY_jogador>=4 && posY_jogador<=4.1) || (posX_jogador>1000 && posY_jogador>=19 && posY_jogador<=19.1))
+            {
+                tempo_inicial = glutGet(GLUT_ELAPSED_TIME)/1000.0; 
+            }
+            tempo_pulo = glutGet(GLUT_ELAPSED_TIME)/1000.0; 
+            t = tempo_pulo - tempo_inicial;
             pulando = true;
         break;
 	}
 }
 
+void handleMouse(int button, int state, int x, int y)
+{
+    y = 500 - y;
+    x = x/2;    
+    cout << " X " << x << " Y " << y << endl;
+    if(estado != 3 && estado != 4)
+    {
+        if(y>=380 && y<=450)
+        {
+            if(x>=100 && x<=180)
+            {
+                frames = marcado = 00;
+            }
+            if(x>=210 && x<=290)
+            {
+                frames = marcado = 30; 
+            }
+            if(x>=320 && x<=400)
+            {
+                frames = marcado = 60;     
+            }
+        }
+        if(y>=200 && y<=350 && x>=100 && x<=400 && marcado!= -1)
+        {
+            estado = 3; escalaX = 0; escalaY = 0;
+            posX_jogador = 0; posY_jogador = 4;
+            rotacao = 0; altura = 4; tamanho = 10;
+        } 
+    }
+}
+
 void display(void)
 {
-    if(rodando)
+    if(estado==3)
     {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -315,21 +442,81 @@ void display(void)
         glLoadIdentity();
         criaPlataforma();
         criaObstaculo();
-        criaJogador();
+        glPushMatrix();
+            glTranslatef(posX_jogador,posY_jogador,0);
+            glRotatef(rotacao,0.0,0.0,1.0);
+            glTranslatef(-posX_jogador,-posY_jogador,0);
+            criaJogador();
+        glPopMatrix();
         escalaX += 0.01;
         if(pulando) puloJogador();
         posX_jogador += 0.01;
-        /*if(colisao_obstaculo())
+        if(posX_jogador>=1000) altura = 19;
+        if(colisao_obstaculo())
         {
             cout << "colidiu" << endl;
+            estado = 4;
         }
         if(chegou())
         {
             cout << "chegou" << endl;
-        }*/
-        glutSwapBuffers();  
-        glutPostRedisplay();
+            estado = 2;
+        }
     }
+    else if(estado == 0)
+    {
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0, 500, 0, 500);
+        glClear (GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        menu();
+        sprintf(texto, "Clique em iniciar");
+    }
+    else if(estado == 1)
+    {
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0, 500, 0, 500);
+        glClear (GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        menu();
+        sprintf(texto, "Voce perdeu");
+    }
+    else if(estado == 2)
+    {
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0, 500, 0, 500);
+        glClear (GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        menu();
+        sprintf(texto, "Voce ganhou");
+    }
+    else if(estado == 4)
+    {
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(-100 + escalaX, 100 + escalaX, -20 + escalaY, 70 + escalaY);
+        glClear (GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        criaPlataforma();
+        criaObstaculo();
+        glPushMatrix();
+            glTranslatef(posX_jogador,posY_jogador,0);
+            glRotatef(rotacao,0.0,0.0,1.0);
+            glTranslatef(-posX_jogador,-posY_jogador,0);
+            criaJogador();
+        glPopMatrix();
+        tamanho-=0.01;
+        if(int(tamanho) == 0) estado = 1;
+    }
+    glutSwapBuffers();  
+    glutPostRedisplay();
 }
 
 void init (void)
@@ -342,7 +529,7 @@ void init (void)
 void novoMainLoop(){
     tempo_novo = glutGet(GLUT_ELAPSED_TIME);
     tempo_antigo = tempo_novo;
-    while(rodando)
+    while(true)
     {
         tempo_novo = glutGet(GLUT_ELAPSED_TIME);
         variacao_de_tempo = tempo_novo - tempo_antigo;
@@ -364,7 +551,7 @@ int main(int argc, char** argv)
     glutCreateWindow ("Trabalho 2");
     init ();
     glutKeyboardFunc(handleKeyboard);
-    //glutMouseFunc(handle_mouse);
+    glutMouseFunc(handleMouse);
     glutDisplayFunc(display);
     novoMainLoop();
     return 0;   /* ISO C requires main to return int. */
