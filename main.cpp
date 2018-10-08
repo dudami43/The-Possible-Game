@@ -248,9 +248,9 @@ void puloJogador()
 { 
     tempo_pulo = glutGet(GLUT_ELAPSED_TIME)/1000.0; 
     t = tempo_pulo - tempo_inicial;
-    if(t<(2.0*(24.0/9.8)))
+    if(t<(2.0*(25.0/9.8)))
     {
-        posY_jogador = 4.0 + (24.0*t) - ((0.5)*(9.8)*(t*t));
+        posY_jogador = 4.0 + (25.0*t) - ((0.5)*(9.8)*(t*t));
         tempo_pulo = glutGet(GLUT_ELAPSED_TIME)/1000.0; 
         t = tempo_pulo - tempo_inicial;
     }
