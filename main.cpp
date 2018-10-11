@@ -253,7 +253,7 @@ void puloJogador()
     {
         posY_jogador = altura + (25.0*t) - ((0.5)*(9.8)*(t*t));
         escalaY = (25.0*t) - ((0.5)*(9.8)*(t*t));
-        //rotacao -= (35*variacao_de_tempo);
+        rotacao -= (34.63509*variacao_de_tempo);
         tempo_pulo = glutGet(GLUT_ELAPSED_TIME)/1000.0; 
         t = (tempo_pulo - tempo_inicial)*2;
     }
@@ -440,7 +440,8 @@ void handleMouse(int button, int state, int x, int y)
         {
             //cout << "if2\n";
             estado = 3; escalaX = 0; escalaY = 0;
-            posX_jogador = 0; posY_jogador = 4;
+            posX_jogador = 0;
+            posY_jogador = 4;
             rotacao = 0; altura = 4; tamanho = 10;
             //cout << posY_jogador << " Y \n";
             primeiro_desenho = true; pulando = false;
@@ -461,9 +462,9 @@ void display(void)
         criaPlataforma();
         criaObstaculo();
         glPushMatrix();
-            glTranslatef(posX_jogador, posY_jogador, 0);
+            glTranslatef((posX_jogador+5), (posY_jogador+5), 0);
             glRotatef(rotacao,0.0,0.0,1.0);
-            glTranslatef(-posX_jogador,-posY_jogador,0);
+            glTranslatef(-(posX_jogador+5),-(posY_jogador+5),0);
             criaJogador();
         glPopMatrix();
         escalaX += (15*variacao_de_tempo);
@@ -522,9 +523,9 @@ void display(void)
         criaPlataforma();
         criaObstaculo();
         glPushMatrix();
-            glTranslatef(posX_jogador,posY_jogador,0);
+            glTranslatef((posX_jogador+5),(posY_jogador+5),0);
             glRotatef(rotacao,0.0,0.0,1.0);
-            glTranslatef(-posX_jogador,-posY_jogador,0);
+            glTranslatef(-(posX_jogador+5),-(posY_jogador+5),0);
             criaJogador();
         glPopMatrix();
         tamanho-=(10*variacao_de_tempo);
